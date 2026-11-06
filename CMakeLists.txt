@@ -94,6 +94,11 @@ add_subdirectory(src/3rdparty/platform/plcore/)
 add_subdirectory(src/3rdparty/platform/plgraphics/)
 add_subdirectory(src/3rdparty/platform/plmodel/)
 add_subdirectory(src/3rdparty/platform/plugins/driver_opengl/)
+# The engine scans its working directory (bin/) for graphics drivers, so
+# make sure the OpenGL driver is built there rather than in lib/.
+set_target_properties(pl_gl_driver PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 # core openhow components
 add_subdirectory(src/extractor)
