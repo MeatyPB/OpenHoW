@@ -6,6 +6,9 @@
 > * The OpenGL driver plugin (`libpl_gl_driver.so`) is now built into `bin/` instead of `lib/`. The engine
 >   only looks for graphics drivers in its working directory, so previously it failed at startup with
 >   `Failed to load a valid graphics layer!` unless the plugin was copied over by hand.
+> * Fixed a crash on every exit (`double free or corruption (!prev)`). The ImGui font buffer was allocated
+>   with `new[]`, which goes through the engine's header-prefixing `operator new`, but ImGui takes ownership
+>   of it and releases it with `free()`. It's now allocated with `IM_ALLOC` instead.
 >
 > The original README follows.
 

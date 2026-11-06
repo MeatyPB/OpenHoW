@@ -111,7 +111,12 @@ void ImGuiImpl_Setup() {
 	}
 
 	size_t fileSize = PlGetFileSize( fontFile );
-	uint8_t *buf = new uint8_t[fileSize];
+	// The font atlas takes ownership of this buffer and releases it with
+	// IM_FREE on shutdown, so it must come from IM_ALLOC. Using new[] here
+	// went through our tracked operator new (which offsets the pointer past
+	// a header), and ImGui's free() of it aborted with
+	// "double free or corruption" every time the game exited.
+	uint8_t *buf = static_cast<uint8_t *>( IM_ALLOC( fileSize ) );
 	PlReadFile( fontFile, buf, 1, fileSize );
 	PlCloseFile( fontFile );
 
