@@ -1,3 +1,14 @@
+> **About this fork:** this is a fork of [hogsy/OpenHoW](https://github.com/hogsy/OpenHoW), which is archived.
+> It contains build fixes so the project compiles and runs on current toolchains (tested on Ubuntu 24.04 with GCC 13):
+>
+> * Added a missing `#include <array>` in `src/engine/game/GameManager.h`. GCC 11+ no longer includes it
+>   implicitly, which broke the build with `field 'slots' has incomplete type 'std::array<CharacterSlot, 8>'`.
+> * The OpenGL driver plugin (`libpl_gl_driver.so`) is now built into `bin/` instead of `lib/`. The engine
+>   only looks for graphics drivers in its working directory, so previously it failed at startup with
+>   `Failed to load a valid graphics layer!` unless the plugin was copied over by hand.
+>
+> The original README follows.
+
 Hello! :wave: 
 
 This project has been archived, for now. For those not aware, there is an [official Hogs of War remaster](https://www.hogsofwar.org/reheated) currently in the works which seems likely to fulfil many of the goals this project set out to accomplish. Rather than compete with that, I've decided to move on to do my own thing.
@@ -64,24 +75,38 @@ There are several requirements in order to compile the project successfully, eac
 have been listed below.
 
 * [CMake](https://cmake.org/) (needed for project generation)
+* [GLEW](http://glew.sourceforge.net/) (needed for the OpenGL renderer)
 * [SDL2](https://www.libsdl.org/) (needed for input, window creation and audio)
 * [OpenAL Soft](https://github.com/kcat/openal-soft) (needed for audio)
 
-At this time with these dependencies the project should compile for Linux (_Ubuntu 19.10_: ```apt install cmake libglew-dev libopenal-dev libsdl2-dev```)
+At this time with these dependencies the project should compile for Linux (_Ubuntu 19.10 through 24.04_: ```apt install cmake libglew-dev libopenal-dev libsdl2-dev```)
 but Windows needs some further care before it will be up and running correctly (see Windows section below).
 
-Once compiled, you need to use the [extraction](https://github.com/TalonBraveInfo/OpenHoW/tree/master/src/tools/extractor) utility: point it to your Hogs of War installation directory. The tool will then copy across and update any of the original Hogs of War's assets as necessary. If you want the files to be copied over somewhere else, add `-<output-dir>` after specifying your Hogs of War directory, but the default ```bin``` directory is required to get OpenHoW up and running.
+Once compiled, you need to use the [extraction](https://github.com/MeatyPB/OpenHoW/tree/master/src/extractor) utility: point it to your Hogs of War installation directory. The tool will then copy across and update any of the original Hogs of War's assets as necessary. If you want the files to be copied over somewhere else, add `-<output-dir>` after specifying your Hogs of War directory, but the default ```bin``` directory is required to get OpenHoW up and running.
 
 
 #### Linux
 
 ```
-git clone https://github.com/TalonBraveInfo/OpenHoW.git
+git clone --recursive https://github.com/MeatyPB/OpenHoW.git
 cd OpenHoW
-git submodule update --init
 mkdir build
 cd build
 cmake ../
+make -j$(nproc)
+```
+
+`--recursive` matters: the `platform` submodule has its own nested submodule. If you've already cloned
+without it, run `git submodule update --init --recursive`.
+
+Everything is output to `bin/`, including the OpenGL driver plugin. Run the extractor against your
+Hogs of War install, then launch the game from inside `bin/` (the engine looks for its data and drivers
+in the current directory):
+
+```
+cd ../bin
+./extractor /path/to/HogsOfWar
+./OpenHoW
 ```
 
 #### Windows
