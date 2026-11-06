@@ -10,6 +10,12 @@
 >   with `new[]`, which goes through the engine's header-prefixing `operator new`, but ImGui takes ownership
 >   of it and releases it with `free()`. It's now allocated with `IM_ALLOC` instead.
 >
+> * Removed the engine's global `operator new`/`delete` replacement, and fixed places that freed
+>   `PlCAlloc`/`PlMAlloc` memory with `free()` or `delete[]` (`u_free`, `DisplayMessageBox`, the `.no2`
+>   loader's error path). The platform allocator puts a tracking header before each block, so mismatched
+>   frees corrupted the heap, including when loading terrain and sounds. The game now runs clean under
+>   AddressSanitizer, which previously aborted on startup.
+>
 > The original README follows.
 
 Hello! :wave: 

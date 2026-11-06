@@ -11,7 +11,7 @@
 #define u_unused( ... ) (void)( __VA_ARGS__ )
 
 #define u_fclose( FILE )  if((FILE) != NULL) { fclose((FILE)); (FILE) = NULL; }
-#define u_free( DATA )    free((DATA)); (DATA) = NULL
+#define u_free( DATA )    PlFree((DATA)); (DATA) = NULL  // pairs with u_alloc (PlCAlloc)
 
 static inline std::string u_stringtolower( std::string s ) {
 	std::transform( s.begin(), s.end(), s.begin(), ::tolower );

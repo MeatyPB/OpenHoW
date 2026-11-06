@@ -33,7 +33,7 @@ No2Handle *No2_LoadFile( const char *path ) {
 	PlCloseFile( fp );
 
 	if ( numReadNormals != numNormals ) {
-		free( normals );
+		PlFree( normals );
 		Warning( "Failed to read in all normals from \"%s\"!\n", path );
 		return NULL;
 	}

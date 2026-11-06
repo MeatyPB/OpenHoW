@@ -18,11 +18,13 @@ ohw::App *ohw::GetApp() {
 ///////////////////////////////////////////////////////////////////
 // Memory Management
 
-// Override C++ new/delete operators, so we can track memory usage
-void *operator new( size_t size ) { return PlMAllocA( size ); }
-void *operator new[]( size_t size ) { return PlMAllocA( size ); }
-void operator delete( void *p ) throw() { PlFree( p ); }
-void operator delete[]( void *p ) throw() { PlFree( p ); }
+// Note: C++ new/delete deliberately use the standard allocator. They used to be
+// replaced globally with PlMAlloc/PlFree for memory tracking, but PlMAlloc
+// prefixes every block with a tracking header and returns a pointer past it.
+// The replacement applied to the whole process, including Mesa/LLVM and ImGui,
+// so any of their allocations freed through a path that wasn't replaced (e.g.
+// C++14 sized delete, or free() on a buffer from new[]) corrupted the heap.
+// Memory from MAlloc/CAlloc/u_alloc must be released with PlFree / u_free.
 
 /**
  * Callback, to catch any fail within hei.
@@ -156,7 +158,7 @@ void ohw::App::DisplayMessageBox( MBErrorLevel level, const char *message, ... )
 
 	SDL_ShowSimpleMessageBox( sdlLevel, WINDOW_TITLE, buf, nullptr );
 
-	delete[] buf;
+	PlFree( buf );
 }
 
 void ohw::App::InitializeConfig() {
