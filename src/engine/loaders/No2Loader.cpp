@@ -42,9 +42,9 @@ No2Handle *No2_LoadFile( const char *path ) {
 	handle->numNormals = numNormals;
 	handle->normals = ( PLVector3 * ) ohw::GetApp()->MAlloc( sizeof( PLVector3 ) * handle->numNormals, true );
 	for ( unsigned int i = 0; i < numNormals; ++i ) {
-		handle->normals[ i ].x = normals->v[ 0 ];
-		handle->normals[ i ].y = normals->v[ 1 ];
-		handle->normals[ i ].z = normals->v[ 2 ];
+		handle->normals[ i ].x = normals[ i ].v[ 0 ];
+		handle->normals[ i ].y = normals[ i ].v[ 1 ];
+		handle->normals[ i ].z = normals[ i ].v[ 2 ];
 	}
 
 	PlFree( normals );

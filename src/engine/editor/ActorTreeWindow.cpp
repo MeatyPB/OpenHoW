@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright © 2017-2022 TalonBrave.info and Others (see CONTRIBUTORS)
 
+#include <vector>
+
 #include <imgui.h>
 
 #include "App.h"
@@ -75,12 +77,14 @@ void ActorTreeWindow::DisplayActorProperties( Actor* actor ) {
 
 		auto* stringProperty = dynamic_cast< StringProperty* >( property );
 		if ( stringProperty != nullptr ) {
-			char *buf = new char[ stringProperty->length() + 1 ];
-			strcpy( buf, stringProperty->c_str() );
-			if ( ImGui::InputText( name, buf, sizeof( buf ) ) ) {
-				*stringProperty = buf;
+			// Leave headroom so the value can be lengthened, and pass the real
+			// buffer size (sizeof( buf ) was the size of a pointer, capping edits
+			// at 7 characters).
+			std::vector< char > buf( stringProperty->length() + 256, '\0' );
+			strcpy( buf.data(), stringProperty->c_str() );
+			if ( ImGui::InputText( name, buf.data(), buf.size() ) ) {
+				*stringProperty = buf.data();
 			}
-			delete []buf;
 		}
 
 		auto* vectorProperty = dynamic_cast<Vector3Property*>(property);
