@@ -185,8 +185,9 @@ static void DrawTimer() {
 		return;
 	}
 
+	// A map can be open without a game mode (e.g. after CreateMap, for editing).
 	ohw::IGameMode *mode = ohw::GetApp()->gameManager->GetMode();
-	if ( !mode->HasRoundStarted() ) {
+	if ( mode == nullptr || !mode->HasRoundStarted() ) {
 		return;
 	}
 

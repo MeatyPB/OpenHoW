@@ -147,7 +147,7 @@ void Console_Initialize() {
 	        true );
 
 	cv_graphics_cull = PlRegisterConsoleVariable( "graphics_cull", "Toggles culling of visible objects.", "true", PL_VAR_BOOL, nullptr, nullptr, true );
-	PlRegisterConsoleVariable( "graphics_draw_terrain", "Toggles rendering of the terrain.", "true", PL_VAR_BOOL, nullptr, nullptr, true );
+	cv_GraphicsDrawTerrain = PlRegisterConsoleVariable( "graphics_draw_terrain", "Toggles rendering of the terrain.", "true", PL_VAR_BOOL, nullptr, nullptr, true );
 	cv_graphics_draw_sprites = PlRegisterConsoleVariable( "graphics_draw_sprites", "Toggles rendering of sprites.", "true", PL_VAR_BOOL, nullptr, nullptr, true );
 	cv_graphics_draw_audio_sources = PlRegisterConsoleVariable( "graphics_draw_audio_sources", "toggles rendering of audio sources", "false", PL_VAR_BOOL, nullptr, nullptr, true );
 	cv_graphics_texture_filter = PlRegisterConsoleVariable( "graphics_texture_filter", "Filter level/model textures?", "true", PL_VAR_BOOL, nullptr, nullptr, true );
