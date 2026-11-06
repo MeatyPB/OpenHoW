@@ -137,6 +137,7 @@ void ohw::ModelResource::LoadObjModel( const std::string &path, bool abortOnFail
 		// Copy all of the data across
 		memcpy( mesh->indices, obj.indices.data(), sizeof( unsigned int ) * obj.indices.size() );
 		memcpy( mesh->vertices, obj.vertices.data(), sizeof( PLGVertex ) * obj.vertices.size() );
+		Mesh_SetFixedCounts( mesh, obj.vertices.size(), obj.indices.size() / 3 );
 
 		std::string textureName = obj.materials[ obj.attributes[ 0 ] ].strTexture;
 		if ( obj.materials.size() > 1 && !textureName.empty() ) {
@@ -189,6 +190,7 @@ void ohw::ModelResource::LoadObjModel( const std::string &path, bool abortOnFail
 		memcpy( meshesVector[ i ]->vertices, obj.vertices.data(), sizeof( PLGVertex ) * obj.vertices.size() );
 		memcpy( meshesVector[ i ]->indices, j->second.indices.data(),
 		        sizeof( unsigned int ) * j->second.indices.size() );
+		Mesh_SetFixedCounts( meshesVector[ i ], obj.vertices.size(), j->second.indices.size() / 3 );
 
 		if ( !j->second.material.strTexture.empty() ) {
 			SharedTextureResourcePointer texture = GetApp()->resourceManager->LoadTexture( j->second.material.strTexture );
@@ -277,6 +279,7 @@ void ohw::ModelResource::LoadVtxModel( const std::string &path, bool abortOnFail
 			Warning( "Failed to create mesh!\nPL: %s\n", PlGetError() );
 			return;
 		}
+		Mesh_SetFixedCounts( mesh, vtxHandle->num_vertices, facHandle->num_triangles );
 
 		// Now we can set up our mesh
 
@@ -316,6 +319,7 @@ void ohw::ModelResource::LoadVtxModel( const std::string &path, bool abortOnFail
 		Warning( "Failed to create mesh!\nPL: %s\n", PlGetError() );
 		return;
 	}
+	Mesh_SetFixedCounts( mesh, facHandle->num_triangles * 3, facHandle->num_triangles );
 
 	// Attempt to load in the normals, it's fine if these don't successfully load as we'll just generate them instead later
 	char normalsPath[PL_SYSTEM_MAX_PATH];

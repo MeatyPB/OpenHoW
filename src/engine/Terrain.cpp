@@ -116,6 +116,8 @@ void ohw::Terrain::GenerateChunkMesh( Chunk *chunk, const PLVector2 &offset ) {
 	if ( chunk->solidMesh == nullptr ) {
 		Error( "Unable to create map chunk mesh, aborting!\nPL: %s\n", PlGetError() );
 	}
+	// Indices were supplied above, vertices are filled in per tile below.
+	Mesh_SetFixedCounts( chunk->solidMesh, 64 );
 
 	if ( chunk->waterMesh != nullptr ) {
 		PlgDestroyMesh( chunk->waterMesh );
@@ -125,6 +127,7 @@ void ohw::Terrain::GenerateChunkMesh( Chunk *chunk, const PLVector2 &offset ) {
 	if ( chunk->waterMesh == nullptr ) {
 		Error( "Unable to create water chunk mesh, aborting!\nPL: %s\n", PlGetError() );
 	}
+	Mesh_SetFixedCounts( chunk->waterMesh, 64 );
 
 	int cm_idx = 0;
 	unsigned int numWaterTiles = 0;

@@ -5,6 +5,7 @@
 #include "Menu.h"
 #include "video.h"
 #include "ShaderManager.h"
+#include "mesh.h"
 
 #if 0
 #	include <libavformat/avformat.h>
@@ -208,6 +209,7 @@ void Video_Draw( void ) {
 		}
 
 		PlgClearMesh( mesh );
+		Mesh_SetFixedCounts( mesh, 4 );
 
 #define x 0
 #define y 0

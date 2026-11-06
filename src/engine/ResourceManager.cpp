@@ -4,6 +4,7 @@
 #include "App.h"
 #include "ResourceManager.h"
 #include "ShaderManager.h"
+#include "graphics/mesh.h"
 
 ohw::ResourceManager::ResourceManager() {
 	// Allow users to enable support for all package formats if desired (disabled by default for security reasons)
@@ -85,6 +86,7 @@ PLMModel *ohw::ResourceManager::GetFallbackModel() {
 	}
 
 	PLGMesh *mesh = PlgCreateMesh( PLG_MESH_LINES, PLG_DRAW_DYNAMIC, 0, 6 );
+	Mesh_SetFixedCounts( mesh, 6 );
 	PlgSetMeshVertexPosition( mesh, 0, { 0, 20, 0 } );
 	PlgSetMeshVertexPosition( mesh, 1, { 0, -20, 0 } );
 	PlgSetMeshVertexPosition( mesh, 2, { 20, 0, 0 } );
