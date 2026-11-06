@@ -17,6 +17,10 @@ typedef struct FacQuad {
 } FacQuad;
 
 static FacQuad *Fac_LoadQuads( PLFile *filePtr, unsigned int numQuads ) {
+	if ( numQuads == 0 ) {
+		return NULL;
+	}
+
 	bool status = false;
 	FacQuad *quads = ( FacQuad * ) u_alloc( numQuads, sizeof( FacQuad ), true );
 	for ( unsigned int i = 0; i < numQuads; ++i ) {
@@ -35,14 +39,22 @@ static FacQuad *Fac_LoadQuads( PLFile *filePtr, unsigned int numQuads ) {
 		}
 	}
 
+	// Hitting the end of the file mid-read means the data is truncated.
+	// Previously the buffer was freed here but still returned, so callers
+	// went on to read freed memory.
 	if ( !status ) {
 		PlFree( quads );
+		return NULL;
 	}
 
 	return quads;
 }
 
 static FacTriangle *Fac_LoadTriangles( PLFile *filePtr, unsigned int numTriangles ) {
+	if ( numTriangles == 0 ) {
+		return NULL;
+	}
+
 	bool status = false;
 	FacTriangle *triangles = ( FacTriangle * ) u_alloc( numTriangles, sizeof( FacTriangle ), true );
 	for ( unsigned int i = 0; i < numTriangles; ++i ) {
@@ -64,6 +76,7 @@ static FacTriangle *Fac_LoadTriangles( PLFile *filePtr, unsigned int numTriangle
 
 	if ( !status ) {
 		PlFree( triangles );
+		return NULL;
 	}
 
 	return triangles;
@@ -158,6 +171,11 @@ FacHandle *Fac_LoadFile( const char *path ) {
 		handle->texture_table = texture_table;
 		handle->texture_table_size = num_textures;
 	}
+
+	// The raw data has been converted into handle->triangles, so release it
+	// (previously leaked on every model load).
+	PlFree( triangles );
+	PlFree( quads );
 
 	return handle;
 }

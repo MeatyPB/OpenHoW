@@ -12,7 +12,7 @@ ohw::InputManager::InputManager() {
 
 	myBindings[ ACTION_MOVE_FORWARD ].Bind( KEY_UP );
 	myBindings[ ACTION_MOVE_FORWARD ].Bind( 'w' );
-	myBindings[ ACTION_MOVE_FORWARD ].Bind( SDL_CONTROLLER_BUTTON_DPAD_DOWN );
+	myBindings[ ACTION_MOVE_FORWARD ].Bind( SDL_CONTROLLER_BUTTON_DPAD_UP );
 
 	myBindings[ ACTION_MOVE_BACKWARD ].Bind( KEY_DOWN );
 	myBindings[ ACTION_MOVE_BACKWARD ].Bind( 's' );

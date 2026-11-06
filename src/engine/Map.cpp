@@ -190,6 +190,15 @@ void ohw::Map::LoadSpawns( const std::string &path ) {
 
 		actorSpawns[ i ].energy = spawns[ i ].energy;
 		actorSpawns[ i ].index = spawns[ i ].index;
+		actorSpawns[ i ].type = spawns[ i ].type;
+		// APig::Deserialize assigns pigs to players by team; without this every
+		// pig was left on team 0 and owned by the first player.
+		actorSpawns[ i ].team = spawns[ i ].team;
+		actorSpawns[ i ].objective = spawns[ i ].objective;
+		actorSpawns[ i ].objective_actor_id = spawns[ i ].objective_actor_id;
+		actorSpawns[ i ].objective_extra[ 0 ] = spawns[ i ].objective_extra[ 0 ];
+		actorSpawns[ i ].objective_extra[ 1 ] = spawns[ i ].objective_extra[ 1 ];
+		actorSpawns[ i ].extra = spawns[ i ].extra;
 
 		// todo: retain or set on per-actor basis?
 		for ( unsigned int j = 0; j < 3; ++j ) {
